@@ -9,6 +9,10 @@ import bodyParser from 'body-parser';
 
 require('dotenv').config()
 
+
+const IPFS = require('ipfs')
+const ipfs = new IPFS()
+
 // var helmet = require('helmet')
 
 // var cookieParser = require('cookie-parser')
@@ -50,6 +54,7 @@ routes.post('/pin', (req, res) => {
 
   // Verify signature
   let {
+    data,
     hash,
     timestamp, // within a second or two? 
     signature
@@ -68,6 +73,19 @@ routes.post('/pin', (req, res) => {
 
   console.log('Verification succeeded!');
 
+  let {
+    hash as calculatedHash
+  } = await ipfs.files.add(new Buffer(data,'utf8'));
+
+  if(calculatedHash != hash){
+    // File hashes do not match! 
+    console.error('File hashes do not match');
+    return res.status(500).send({
+      error: 'File hashes do not match'
+    });
+  }
+
+  console.log('File contents verified');
 
 	cmd.get('ipfs pin add ' + hash,(err,data,stderr)=>{
     if(err){
