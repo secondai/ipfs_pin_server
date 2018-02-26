@@ -13,6 +13,7 @@
     "server:lint": "esw -w src test"
   },
   "dependencies": {
+    "babel-cli": "6.26.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-register": "6.26.0",

@@ -89,7 +89,7 @@ routes.post('/pin', async (req, res) => {
 
   // Add contents
 
-  let pinnedResponse = await ipfs.files.pin(hash);
+  let pinnedResponse = await ipfs.pin.add(hash);
 
   console.log('pinnedResponse:', pinnedResponse);
 
