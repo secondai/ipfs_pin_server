@@ -91,7 +91,7 @@ routes.post('/pin', async (req, res) => {
 
   let pinnedResponse = await ipfs.pin.add(hash);
 
-  console.log('pinnedResponse:', pinnedResponse);
+  console.log('Pinned OK!:', pinnedResponse);
 
   res.send({
     pinnedResponse
