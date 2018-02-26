@@ -10,8 +10,8 @@ import bodyParser from 'body-parser';
 require('dotenv').config()
 
 
-const IPFS = require('ipfs')
-const ipfs = new IPFS()
+const ipfsApi = require('ipfs-api')
+const ipfs = ipfsApi()
 
 // var helmet = require('helmet')
 
@@ -87,26 +87,36 @@ routes.post('/pin', async (req, res) => {
 
   console.log('File contents verified');
 
-	cmd.get('ipfs pin add ' + hash,(err,data,stderr)=>{
-    if(err){
-      console.error('Failed cmd.get: ipfs pin add.');
-      console.error(err);
-      console.error(stderr);
-      return res.status(500).send({
-        error: 'Failed'
-      });
-    }
+  // Add contents
 
+  let pinnedResponse = await ipfs.files.pin(hash);
 
-    console.log('Command Result:', data);
+  console.log('pinnedResponse:', pinnedResponse);
 
-    // return response
-    res.send({
-      data
-      // result
-    })
-
+  res.send({
+    pinnedResponse
   });
+
+	// cmd.get('ipfs pin add ' + hash,(err,data,stderr)=>{
+ //    if(err){
+ //      console.error('Failed cmd.get: ipfs pin add.');
+ //      console.error(err);
+ //      console.error(stderr);
+ //      return res.status(500).send({
+ //        error: 'Failed'
+ //      });
+ //    }
+
+
+ //    console.log('Command Result:', data);
+
+ //    // return response
+ //    res.send({
+ //      data
+ //      // result
+ //    })
+
+ //  });
 
 });
 

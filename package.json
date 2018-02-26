@@ -22,6 +22,7 @@
     "express": "4.16.2",
     "expressjs": "1.0.1",
     "ipfs": "0.27.7",
+    "ipfs-api": "18.1.1",
     "node-cmd": "3.0.0",
     "node-rsa": "0.4.2",
     "orbit-db": "0.19.5"
