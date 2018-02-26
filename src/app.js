@@ -71,6 +71,9 @@ routes.post('/pin', (req, res) => {
 
 	cmd.get('ipfs pin add ' + hash,(err,data,stderr)=>{
     if(err){
+      console.error('Failed cmd.get: ipfs pin add.');
+      console.error(err);
+      console.error(stderr);
       return res.status(500).send({
         error: 'Failed'
       });
