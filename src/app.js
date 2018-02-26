@@ -73,9 +73,9 @@ routes.post('/pin', async (req, res) => {
 
   console.log('Verification succeeded!');
 
-  let response = await ipfs.files.add(new Buffer(data,'utf8'));
-  console.log('Response:', response);
-  let calculatedHash = response.hash;
+  let responses = await ipfs.files.add(new Buffer(data,'utf8'));
+  console.log('Responses:', responses);
+  let calculatedHash = responses[0].hash;
 
   if(calculatedHash != hash){
     // File hashes do not match! 
