@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 let routes = Router();
-routes.post('/pin', (req, res) => {
+routes.post('/pin', async (req, res) => {
 	// hash, signature provided. public key is local (for matching) 
 
   console.log('PIN');
