@@ -89,12 +89,12 @@ routes.post('/pin', async (req, res) => {
 
   // Add contents
 
-  let pinnedResponse = await ipfs.pin.add(hash);
+  let pinned = await ipfs.pin.add(hash);
 
-  console.log('Pinned OK!:', pinnedResponse);
+  console.log('Pinned OK!:', pinned);
 
   res.send({
-    pinnedResponse
+    pinned
   });
 
 	// cmd.get('ipfs pin add ' + hash,(err,data,stderr)=>{
