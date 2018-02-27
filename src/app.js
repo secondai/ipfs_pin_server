@@ -179,8 +179,11 @@ routes.get('/hash/:hash', async (req, res) => {
 
   let data = await ipfs.files.cat(hash);
 
+  console.log('Got data');
+  console.log(data);
+
   res.send({
-    data: data.toString('utf8')
+    data: data
   });
 
 });
