@@ -18,7 +18,10 @@ cd ~
 wget https://dist.ipfs.io/go-ipfs/v0.4.13/go-ipfs_v0.4.13_linux-amd64.tar.gz
 tar xvfz go-ipfs_v0.4.13_linux-amd64.tar.gz
 cd go-ipfs
-sudo ./install
+sudo ./install.sh
+
+ipfs init
+ipfs daemon &
 
 cd ~
 git clone https://github.com/secondai/ipfs_pin_server.git

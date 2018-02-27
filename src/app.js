@@ -11,7 +11,16 @@ require('dotenv').config()
 
 
 const ipfsApi = require('ipfs-api')
+const OrbitDB = require('orbit-db')
 const ipfs = ipfsApi()
+
+// Start replicating orbitdb database 
+
+const orbitdb = new OrbitDB(ipfs)
+orbitdb.log(process.env.ORBIT_DB_ADDRESS,(err)=>{
+  console.error('Orbit init error:', err);
+})
+
 
 // var helmet = require('helmet')
 
