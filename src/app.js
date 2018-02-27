@@ -166,6 +166,26 @@ routes.post('/pin', async (req, res) => {
 });
 
 
+routes.get('/hash/:hash', async (req, res) => {
+  // hash, signature provided. public key is local (for matching) 
+
+  console.log('Get Hash');
+
+
+  // Verify signature
+  let {
+    hash,
+  } = req.params.hash;
+
+  let data = await ipfs.files.cat(hash);
+
+  res.send({
+    data: data.toString('utf8')
+  });
+
+});
+
+
 app.use(routes);
 
 // Catch 404 and forward to error handler
