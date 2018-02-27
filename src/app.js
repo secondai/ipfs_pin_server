@@ -13,14 +13,14 @@ require('dotenv').config()
 const ipfsApi = require('ipfs-api')
 const OrbitDB = require('orbit-db')
 const ipfs = ipfsApi({
-  EXPERIMENTAL: {
-    pubsub: true,
-  },
+  // EXPERIMENTAL: {
+  //   pubsub: true,
+  // },
 })
 
 // Start replicating orbitdb database 
 
-const orbitdb = new OrbitDB(ipfs, './orbitdb/test1')
+const orbitdb = new OrbitDB(ipfs); //, './orbitdb/test1')
 orbitdb.eventlog('testing349sfk872',(err, db)=>{
   if(err){
     return console.error('Orbit init error:', err);
@@ -36,6 +36,12 @@ orbitdb.eventlog('testing349sfk872',(err, db)=>{
   // })
 
   function add(){
+    if(!ipfs.isOnline()){
+      console.log('not online yet');
+      setTimeout(add,1000)
+      return;
+    }
+    console.log('add1');
     db.add({ test: (new Date()).getTime() }, ()=>{
       setTimeout(add,1000)
     })
