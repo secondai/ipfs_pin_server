@@ -20,7 +20,18 @@ const ipfs = ipfsApi({
 
 // Start replicating orbitdb database 
 
-const orbitdb = new OrbitDB(ipfs); //, './orbitdb/test1')
+async function startOrbit(){
+  console.log('start orbit');
+
+  const orbitdb = new OrbitDB(ipfs)
+  const db = await orbitdb.log('hello')
+
+  console.log('GOT DB!');
+
+}
+
+setTimeout(startOrbit,1000);
+
 // orbitdb.eventlog('testing349sfk872',(err, db)=>{
 //   if(err){
 //     return console.error('Orbit init error:', err);
