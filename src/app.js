@@ -12,7 +12,11 @@ require('dotenv').config()
 
 const ipfsApi = require('ipfs-api')
 const OrbitDB = require('orbit-db')
-const ipfs = ipfsApi()
+const ipfs = ipfsApi({
+  EXPERIMENTAL: {
+    pubsub: true,
+  },
+})
 
 // Start replicating orbitdb database 
 
