@@ -175,7 +175,7 @@ routes.get('/hash/:hash', async (req, res) => {
   // Verify signature
   let {
     hash,
-  } = req.params.hash;
+  } = req.params;
 
   let data = await ipfs.files.cat(hash);
 
@@ -183,7 +183,7 @@ routes.get('/hash/:hash', async (req, res) => {
   console.log(data);
 
   res.send({
-    data: data
+    data: data.toString('utf8')
   });
 
 });
