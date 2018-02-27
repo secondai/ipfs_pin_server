@@ -166,7 +166,7 @@ routes.post('/pin', async (req, res) => {
 });
 
 
-routes.get('/hash/:hash', async (req, res) => {
+routes.post('/hash/:hash', async (req, res) => {
   // hash, signature provided. public key is local (for matching) 
 
   console.log('Get Hash');
@@ -179,11 +179,16 @@ routes.get('/hash/:hash', async (req, res) => {
 
   let data = await ipfs.files.cat(hash);
 
-  console.log('Got data');
-  console.log(data);
+  let str;
+
+  try {
+    str = data.toString('utf8');
+  }catch(err){
+    console.error('Failed finding hash', hash, err);
+  }
 
   res.send({
-    data: data.toString('utf8')
+    data: str
   });
 
 });
