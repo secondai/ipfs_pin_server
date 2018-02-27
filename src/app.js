@@ -20,18 +20,27 @@ const ipfs = ipfsApi({
 
 // Start replicating orbitdb database 
 
-const orbitdb = new OrbitDB(ipfs)
-orbitdb.log(process.env.ORBIT_DB_ADDRESS,(err, db)=>{
+const orbitdb = new OrbitDB(ipfs, './orbitdb/test1')
+orbitdb.eventlog('testing349sfk872',(err, db)=>{
   if(err){
     return console.error('Orbit init error:', err);
   }
 
-  console.log('Connected to ORBIT_DB_ADDRESS!');
+  // process.env.ORBIT_DB_ADDRESS
 
-  // Listen for updates from peers
-  db.events.on('replicated', (address) => {
-    console.log(db.iterator({ limit: -1 }).collect())
-  })
+  console.log('Connected to ORBIT_DB_ADDRESS!', db.address.toString());
+
+  // // Listen for updates from peers
+  // db.events.on('replicated', (address) => {
+  //   console.log(db.iterator({ limit: -1 }).collect())
+  // })
+
+  function add(){
+    db.add({ test: (new Date()).getTime() }, ()=>{
+      setTimeout(add,1000)
+    })
+  }
+  add();
 
 })
 
