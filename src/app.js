@@ -17,8 +17,18 @@ const ipfs = ipfsApi()
 // Start replicating orbitdb database 
 
 const orbitdb = new OrbitDB(ipfs)
-orbitdb.log(process.env.ORBIT_DB_ADDRESS,(err)=>{
-  console.error('Orbit init error:', err);
+orbitdb.log(process.env.ORBIT_DB_ADDRESS,(err, db)=>{
+  if(err){
+    return console.error('Orbit init error:', err);
+  }
+
+  console.log('Connected to ORBIT_DB_ADDRESS!');
+
+  // Listen for updates from peers
+  db.events.on('replicated', (address) => {
+    console.log(db.iterator({ limit: -1 }).collect())
+  })
+
 })
 
 
