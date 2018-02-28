@@ -11,8 +11,44 @@ require('dotenv').config()
 
 
 const ipfsApi = require('ipfs-api')
-// const OrbitDB = require('orbit-db')
+const OrbitDB = require('orbit-db')
 const ipfs = ipfsApi()
+
+let orbitdb;
+
+// Load IPFS repo if exists (.env) 
+function ipfsSetup(){
+  return new Promise(async(resolve,reject)=>{
+
+    console.log('Setup orbitdb');
+
+    // Create OrbitDB instance
+    let orbitdbInstance = new OrbitDB(ipfs)
+
+    // giving ourselves access 
+    const access = {
+      // Give write access to ourselves
+      write: [orbitdbInstance.key.getPublic('hex')],
+      // write: [
+      //   process.env.ORBIT_PUBLIC_WRITE_KEY
+      // ]
+    }
+
+    console.log('creating orbit db 1');
+    orbitdb = await orbitdbInstance.log('node-chain-1', access)
+    console.log('loading data for orbit db 1');
+    await orbitdb.load()
+    // app.orbitLogDb = db;
+
+    console.log('OrbitDB Address (for sharing):', orbitdb.address.toString())
+
+    // /orbitdb/Qmd8TmZrWASypEp4Er9tgWP4kCNQnW4ncSnvjvyHQ3EVSU/first-database
+
+    resolve();
+
+  })
+}
+
 
 // Start replicating orbitdb database 
 
@@ -90,6 +126,15 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
+
+// IPFS middleware 
+let ipfsReady = ipfsSetup();
+app.use(async (req,res,next)=>{
+  await ipfsReady;
+  next();
+});
+
+
 let routes = Router();
 routes.post('/pin', async (req, res) => {
 	// hash, signature provided. public key is local (for matching) 
@@ -132,8 +177,7 @@ routes.post('/pin', async (req, res) => {
 
   console.log('File contents verified');
 
-  // Add contents
-
+  // Pin contents
   let pinned = await ipfs.pin.add(hash);
 
   console.log('Pinned OK!:', pinned);
@@ -168,9 +212,6 @@ routes.post('/pin', async (req, res) => {
 
 routes.post('/hash/:hash', async (req, res) => {
   // hash, signature provided. public key is local (for matching) 
-
-  console.log('Get Hash');
-
 
   // Verify signature
   let {
