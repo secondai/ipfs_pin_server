@@ -21,7 +21,8 @@ function ipfsSetup(){
   return new Promise(async(resolve,reject)=>{
 
     console.log('Setup orbitdb');
-
+    console.log('isOnline:', ipfs.isOnline());
+    
     // Create OrbitDB instance
     let orbitdbInstance = new OrbitDB(ipfs)
 
