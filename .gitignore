@@ -65,7 +65,8 @@ typings/
 .env
 
 .DS_Store
-
+repo
+orbitdb
 
 
 

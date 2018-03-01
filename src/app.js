@@ -10,7 +10,7 @@ import bodyParser from 'body-parser';
 require('dotenv').config()
 
 const IPFS = require('ipfs');
-const ipfsApi = require('ipfs-api')
+// const ipfsApi = require('ipfs-api')
 const OrbitDB = require('orbit-db')
 // const ipfs = ipfsApi()
 
@@ -41,8 +41,8 @@ let ipfsOptions = {
         "/ip4/127.0.0.1/tcp/4003/ws",
         "/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star"
       ],
-      "API": "/ip4/127.0.0.1/tcp/5002",
-      "Gateway": "/ip4/127.0.0.1/tcp/9090"
+      "API": "/ip4/127.0.0.1/tcp/5003",
+      "Gateway": "/ip4/127.0.0.1/tcp/9091"
     },
     "Discovery": {
       "MDNS": {
@@ -86,18 +86,46 @@ let ipfs = new IPFS(ipfsOptions);
 function ipfsSetup(){
   return new Promise(async(resolve,reject)=>{
 
-    ipfs.on('ready', ()=>{
+    ipfs.on('ready', async()=>{
       console.log('ipfs ready');
 
       console.log('isOnline:', ipfs.isOnline());
 
-      let txt = `
-${(new Date()).getTime()} - Testing - kshf2398j829nur983urnc02u3rcnu2nc3
-      `;
-      let newFile = new Buffer(txt,'utf8');
-      ipfs.files.add(newFile,(err,data)=>{
-        console.log(err,data);
-      })
+//       let txt = `
+// ${(new Date()).getTime()} - Testing - kshf2398j829nur983urnc02u3rcnu2nc3
+//       `;
+//       let newFile = new Buffer(txt,'utf8');
+//       ipfs.files.add(newFile,(err,data)=>{
+//         console.log(err,data);
+//       })
+
+      const orbitdb = new OrbitDB(ipfs)
+
+      // Create / Open a database
+      console.log('syncing/replicationg orbitdb');
+
+      try {
+
+        const db = await orbitdb.log(process.env.ORBIT_DB_ADDRESS)
+
+        console.log('loading db');
+        await db.load()
+
+        console.log('data:');
+        let data = db.iterator({ limit: -1 }).collect().map((e) => e.payload.value)
+        console.log(data);
+
+        console.log('listening for replication');
+
+        // Listen for updates from peers
+        db.events.on('replicated', (address) => {
+          console.log('Replicated', address);
+          console.log(db.iterator({ limit: -1 }).collect())
+        })
+
+      }catch(err){
+        console.error(err);
+      }
 
     })
     // console.log('Setup orbitdb');
