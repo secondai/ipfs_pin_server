@@ -14,36 +14,36 @@ const ipfsApi = require('ipfs-api')
 const OrbitDB = require('orbit-db')
 const ipfs = ipfsApi()
 
-let orbitdb;
+// let orbitdb;
 
 // Load IPFS repo if exists (.env) 
 function ipfsSetup(){
   return new Promise(async(resolve,reject)=>{
 
-    console.log('Setup orbitdb');
-    console.log('isOnline:', ipfs.isOnline());
+    // console.log('Setup orbitdb');
+    // console.log('isOnline:', ipfs.isOnline());
     
-    // Create OrbitDB instance
-    let orbitdbInstance = new OrbitDB(ipfs)
+    // // Create OrbitDB instance
+    // let orbitdbInstance = new OrbitDB(ipfs)
 
-    // giving ourselves access 
-    const access = {
-      // Give write access to ourselves
-      write: [orbitdbInstance.key.getPublic('hex')],
-      // write: [
-      //   process.env.ORBIT_PUBLIC_WRITE_KEY
-      // ]
-    }
+    // // giving ourselves access 
+    // const access = {
+    //   // Give write access to ourselves
+    //   write: [orbitdbInstance.key.getPublic('hex')],
+    //   // write: [
+    //   //   process.env.ORBIT_PUBLIC_WRITE_KEY
+    //   // ]
+    // }
 
-    console.log('creating orbit db 1');
-    orbitdb = await orbitdbInstance.log('node-chain-1', access)
-    console.log('loading data for orbit db 1');
-    await orbitdb.load()
-    // app.orbitLogDb = db;
+    // console.log('creating orbit db 1');
+    // orbitdb = await orbitdbInstance.log('node-chain-1', access)
+    // console.log('loading data for orbit db 1');
+    // await orbitdb.load()
+    // // app.orbitLogDb = db;
 
-    console.log('OrbitDB Address (for sharing):', orbitdb.address.toString())
+    // console.log('OrbitDB Address (for sharing):', orbitdb.address.toString())
 
-    // /orbitdb/Qmd8TmZrWASypEp4Er9tgWP4kCNQnW4ncSnvjvyHQ3EVSU/first-database
+    // // /orbitdb/Qmd8TmZrWASypEp4Er9tgWP4kCNQnW4ncSnvjvyHQ3EVSU/first-database
 
     resolve();
 
