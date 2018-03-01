@@ -12,7 +12,7 @@ require('dotenv').config()
 const IPFS = require('ipfs');
 const ipfsApi = require('ipfs-api')
 const OrbitDB = require('orbit-db')
-const ipfs = ipfsApi()
+// const ipfs = ipfsApi()
 
 
 // OrbitDB uses Pubsub which is an experimental feature
@@ -78,7 +78,7 @@ let ipfsOptions = {
   }
 }
 
-let ipfs2 = new IPFS(ipfsOptions);
+let ipfs = new IPFS(ipfsOptions);
 
 // let orbitdb;
 
@@ -86,10 +86,18 @@ let ipfs2 = new IPFS(ipfsOptions);
 function ipfsSetup(){
   return new Promise(async(resolve,reject)=>{
 
-    ipfs2.on('ready', ()=>{
-      console.log('ipfs2 ready');
+    ipfs.on('ready', ()=>{
+      console.log('ipfs ready');
 
-      console.log('isOnline:', ipfs2.isOnline());
+      console.log('isOnline:', ipfs.isOnline());
+
+      let txt = `
+${(new Date()).getTime()} - Testing - kshf2398j829nur983urnc02u3rcnu2nc3
+      `;
+      let newFile = new Buffer(txt,'utf8');
+      ipfs.files.add(newFile,(err,data)=>{
+        console.log(err,data);
+      })
 
     })
     // console.log('Setup orbitdb');
